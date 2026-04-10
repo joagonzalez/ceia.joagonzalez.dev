@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimización de intervenciones automatizadas contra discursos de odio — Joaquín González</title>
+
+  <!-- JetBrains Mono — local (necesario para export PDF offline) -->
+  <style>
+    @font-face { font-family:'JetBrains Mono'; font-weight:300; font-style:normal; src:url('vendor/fonts/jb-300.ttf') format('truetype'); }
+    @font-face { font-family:'JetBrains Mono'; font-weight:400; font-style:normal; src:url('vendor/fonts/jb-400.ttf') format('truetype'); }
+    @font-face { font-family:'JetBrains Mono'; font-weight:500; font-style:normal; src:url('vendor/fonts/jb-500.ttf') format('truetype'); }
+    @font-face { font-family:'JetBrains Mono'; font-weight:600; font-style:normal; src:url('vendor/fonts/jb-600.ttf') format('truetype'); }
+    @font-face { font-family:'JetBrains Mono'; font-weight:700; font-style:normal; src:url('vendor/fonts/jb-700.ttf') format('truetype'); }
+  </style>
+
+  <!-- Reveal.js (local — necesario para export PDF headless) -->
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+
+  <style>
+    /* ============================================================
+       VARIABLES
+       ============================================================ */
+    :root {
+      --bg:        #0d0d0d;
+      --bg-card:   #161616;
+      --bg-card2:  #1e1e1e;
+      --text:      #d8d8d8;
+      --text-dim:  #909090;
+      --border:    #2a2a2a;
+      --green:     #39ff14;
+      --violet:    #bf5fff;
+      --orange:    #ff8c00;
+      --red:       #ff4040;
+      --white:     #f0f0f0;
+      --font:      'JetBrains Mono', monospace;
+    }
+
+    /* ============================================================
+       BASE
+       ============================================================ */
+    .reveal {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .reveal .slides {
+      text-align: left;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: var(--font);
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      margin: 0 0 0.5em 0;
+      color: var(--white);
+    }
+    .reveal h1 { font-size: 1.65em; }
+    .reveal h2 { font-size: 1.1em;  color: var(--green); font-weight: 500; }
+    .reveal h3 { font-size: 0.9em;  color: var(--violet); }
+
+    .reveal p  { font-size: 0.88em; line-height: 1.6; margin: 0 0 0.4em; }
+    .reveal li { font-size: 0.86em; line-height: 1.6; margin-bottom: 0.3em; }
+    .reveal ul, .reveal ol { margin-left: 1.2em; }
+
+    .reveal a   { color: var(--green); text-decoration: none; }
+    .reveal pre { box-shadow: none; }
+    .reveal .progress { color: var(--green); height: 3px; }
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--text-dim);
+      font-family: var(--font);
+      font-size: 0.6em;
+    }
+
+    /* ============================================================
+       UTILITY
+       ============================================================ */
+    .green    { color: var(--green); }
+    .violet   { color: var(--violet); }
+    .orange   { color: var(--orange); }
+    .red      { color: var(--red); }
+    .dim      { color: var(--text-dim); }
+    .white    { color: var(--white); }
+    .center   { text-align: center; }
+    .bold     { font-weight: 700; }
+    .small    { font-size: 0.78em; }
+    .xsmall   { font-size: 0.70em; }
+
+    /* Stat block */
+    .stat {
+      display: block;
+      font-size: 2.2em;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1.05;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.68em;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.7em 0.9em;
+    }
+    .card + .card { margin-top: 0.55em; }
+
+    /* Accent bar left */
+    .bar-green  { border-left: 3px solid var(--green);  padding-left: 0.75em; }
+    .bar-violet { border-left: 3px solid var(--violet); padding-left: 0.75em; }
+    .bar-orange { border-left: 3px solid var(--orange); padding-left: 0.75em; }
+    .bar-dim    { border-left: 3px solid var(--border); padding-left: 0.75em; }
+
+    /* Tag pill */
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 0.05em 0.45em;
+      border-radius: 2px;
+      font-size: 0.65em;
+      margin: 0.1em 0.15em 0.1em 0;
+    }
+
+    /* Grid layouts */
+    .cols    { display: grid; grid-template-columns: 1fr 1fr;       gap: 1.2em; align-items: start; }
+    .cols-3  { display: grid; grid-template-columns: 1fr 1fr 1fr;  gap: 0.9em; align-items: start; }
+    .c60-40  { display: grid; grid-template-columns: 60% 40%;      gap: 1.2em; align-items: center; }
+    .c40-60  { display: grid; grid-template-columns: 40% 60%;      gap: 1.2em; align-items: center; }
+    .c35-65  { display: grid; grid-template-columns: 35% 65%;      gap: 1.2em; align-items: start; }
+
+    /* Image wrappers */
+    .img-dark {           /* dark-background images — no wrapper needed */
+      display: block;
+      width: 100%;
+      max-height: 52vh;
+      object-fit: contain;
+    }
+    .img-light-wrap {     /* white/cream background images */
+      background: #f2f2f2;
+      border-radius: 3px;
+      padding: 0.4em;
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .img-light-wrap img {
+      display: block;
+      width: 100%;
+      max-height: 50vh;
+      object-fit: contain;
+    }
+    .img-caption {
+      display: block;
+      font-size: 0.62em;
+      color: #c0c0c0;
+      text-align: center;
+      margin-top: 0.4em;
+    }
+
+    /* Slide header rule */
+    .sh {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.35em;
+      margin-bottom: 0.75em;
+    }
+    .sh h2 { margin: 0; font-size: 1.05em; }
+
+    /* Section divider (inter-block) */
+    .section-div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 2.5em;
+    }
+    .section-div .blk { font-size: 0.75em; color: var(--text-dim); margin-bottom: 0.3em; }
+    .section-div h1   { font-size: 2em; color: var(--green); margin: 0; }
+
+    /* Table */
+    .reveal table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.72em;
+    }
+    .reveal table th {
+      color: var(--green);
+      border-bottom: 1px solid var(--green);
+      padding: 0.35em 0.6em;
+      text-align: left;
+      font-weight: 500;
+    }
+    .reveal table td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.35em 0.6em;
+      color: var(--text);
+    }
+    .reveal table tr.hl td {
+      color: var(--green);
+      background: rgba(57, 255, 20, 0.05);
+      font-weight: 600;
+    }
+
+    /* Terminal frame */
+    .terminal-frame {
+      border: 1px solid #2e2e2e;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 0 18px rgba(57,255,20,0.06);
+    }
+    .terminal-bar {
+      background: #1c1c1c;
+      border-bottom: 1px solid #2e2e2e;
+      padding: 0.38em 0.8em;
+      display: flex;
+      align-items: center;
+      gap: 0.38em;
+    }
+    .dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c840; }
+    .terminal-bar-title {
+      margin-left: 0.5em;
+      font-size: 0.55em;
+      color: var(--text-dim);
+      letter-spacing: 0.03em;
+    }
+    .terminal-body { padding: 0.5em; }
+
+    /* Video placeholder */
+    .vid-placeholder {
+      width: 82%;
+      aspect-ratio: 16/9;
+      background: var(--bg-card);
+      border: 2px dashed #333;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .vid-placeholder .play { font-size: 2.5em; color: #333; margin-bottom: 0.3em; }
+    .vid-placeholder p { font-size: 0.72em; color: var(--text-dim); margin: 0.15em 0; }
+
+    /* ============================================================
+       TITLE SLIDE
+       ============================================================ */
+    .title-slide {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 1.8em 2.5em;
+    }
+    .title-slide .uba-logo {
+      position: absolute;
+      top: 1.4em;
+      right: 1.8em;
+      height: 150px;
+      width: auto;
+      background: white;
+      padding: 6px 14px;
+      border-radius: 3px;
+    }
+    .title-slide h1 {
+      font-size: 2.0em;
+      line-height: 1.3;
+      color: var(--white);
+      margin-bottom: 0.7em;
+    }
+    .title-slide .author   { font-size: 1.15em; color: var(--green); margin-bottom: 0.15em; }
+    .title-slide .prog     { font-size: 0.95em; color: var(--white); }
+    .title-slide .dir      { font-size: 0.88em; color: #c0c0c0; margin-top: 0.55em; }
+    .title-slide .jury     { font-size: 0.78em; color: #b0b0b0; margin-top: 0.3em; line-height: 1.7; }
+
+    /* ============================================================
+       PRINT / PDF — one slide per page, 16:9 (simil PPT export)
+       Activar con: index.html?print-pdf en Chrome, luego Ctrl+P
+       ============================================================ */
+    @media print {
+      @page {
+        /* 16:9 — equivalente a 1280×720px a 96dpi */
+        size: 13.333in 7.5in;
+        margin: 0;
+      }
+      body, html {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      /* Cada pdf-page = exactamente un slide = una página */
+      .reveal.print-pdf .pdf-page {
+        page-break-after: always !important;
+        break-after: page !important;
+        height: 720px !important;
+        width:  1280px !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+      /* Sin scrollbar ni overflow que corte contenido */
+      .reveal.print-pdf {
+        width:  1280px !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+    }
+
+    /* ============================================================
+       PRINT-PDF FIXES — fuera de @media print para que apliquen
+       cuando Reveal.js re-layoutea con ?print-pdf en el browser
+       ============================================================ */
+    .reveal.print-pdf .terminal-body[style*="height:34vh"] {
+      height: 245px !important;
+    }
+    .reveal.print-pdf img.img-slide2 {
+      max-height: 288px !important;
+    }
+    .reveal.print-pdf .terminal-body img[style*="max-height:44vh"] {
+      max-height: 245px !important;
+    }
+    .reveal.print-pdf [style*="min-height:50vh"] {
+      min-height: 360px !important;
+    }
+    /* In print, hide fragment overlays so only first image shows */
+    .reveal.print-pdf .fragment[style*="position:absolute"] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+<canvas id="matrix-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;opacity:0.18;pointer-events:none;z-index:999;display:none;"></canvas>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ============================================================
+     SLIDE 1 — TÍTULO
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="title-slide">
+    <img src="Uba_fiuba_ingenieria_logo.png" class="uba-logo" alt="UBA FIUBA — Facultad de Ingeniería">
+    <h1>Optimización de intervenciones<br>automatizadas contra discursos<br>de odio en redes sociales</h1>
+    <p class="author">Mg. Ing. Joaquín González</p>
+    <p class="prog">Carrera de Especialización en Inteligencia Artificial · CEIA FIUBA</p>
+    <p class="dir">Director: Dr. Juan Manuel Ortiz de Zarate (FCEyN-UBA)</p>
+    <p class="jury">
+      Jurado:<br>
+      Esp. Lic. Noelia Melina Qualindi (FIUBA) — noelia.qualindi@gmail.com<br>
+      Esp. Ing. Diego Martín Braga (FIUBA) — diegobra20@gmail.com<br>
+      Dr. Ing. Facundo Lucianna (FACET-UNT / FIUBA) — facundolucianna@gmail.com<br>
+      <br>
+      Ciudad Autónoma de Buenos Aires, abril de 2026
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 2 — EL PROBLEMA
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>El problema</h2></div>
+  <div class="c40-60">
+    <div>
+      <div class="card" style="margin-bottom:0.55em;">
+        <span class="stat">millones</span>
+        <span class="stat-label">de publicaciones diarias en X.com</span>
+      </div>
+      <div class="card" style="margin-bottom:0.55em;">
+        <span class="stat" style="color:var(--violet);">insuficiente</span>
+        <span class="stat-label">moderación humana frente al volumen masivo</span>
+      </div>
+      <div class="card bar-green">
+        <p style="margin:0;font-size:0.78em;">
+          El discurso tóxico y polarizante se propaga<br>
+          <span class="green">sin contranarración efectiva</span>
+        </p>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <div class="terminal-frame" style="display:inline-block;">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">X.com — intervención Normsy</span></div>
+        <div class="terminal-body" style="padding:0.3em;line-height:0;"><img src="images/normsy_intervention_screenshot.png" class="img-slide2" style="display:block;width:auto;max-height:40vh;" alt="Intervención Normsy"></div>
+      </div>
+      <span class="img-caption">Intervención generada automáticamente por Normsy en X.com</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 3 — QUÉ ES NORMSY
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Normsy</h2></div>
+  <div class="cols">
+    <div>
+      <p class="bar-green" style="font-size:0.88em;margin-bottom:0.9em;">
+        Plataforma de contranarrativas automatizadas en X.com
+      </p>
+      <ul>
+        <li>Iniciativa <span class="green">no partidaria</span>, sin fines de lucro</li>
+        <li>Desarrollada por <span class="green">Data Voices</span> para <span class="green">Civic Health Project</span> (EE.UU.)</li>
+        <li>En producción desde <span class="violet">enero 2023</span></li>
+        <li>Dos modos: <em>human pilot + LLM copilot</em> y <em>full automatizado</em></li>
+      </ul>
+      <br>
+      <div class="card xsmall dim" style="line-height:1.7;">
+        Detecta contenido tóxico · genera contranarrativa ·<br>
+        publica intervención · recolecta métricas de engagement
+      </div>
+    </div>
+    <div>
+      <div class="card bar-violet" style="margin-bottom:0.55em;">
+        <p class="small dim" style="margin:0 0 0.3em;">Este trabajo abarca tres áreas</p>
+        <p class="small" style="margin:0;">① Plataforma de analítica de datos</p>
+        <p class="small" style="margin:0;">② Framework de evaluación de clasificadores</p>
+        <p class="small" style="margin:0;">③ Fine-tuning del clasificador binario</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="stat">111.000+</span>
+        <span class="stat-label">intervenciones publicadas en producción</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div style="margin-top:1.6em;position:relative;padding:0 0.5em;">
+    <div style="position:absolute;top:8px;left:0;right:0;height:2px;background:var(--border);"></div>
+    <div style="display:flex;justify-content:space-between;position:relative;">
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--text-dim);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall" style="margin:0;color:var(--text-dim);">Ene 2023</p>
+        <p class="xsmall dim" style="margin:0;">Normsy en<br>producción</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--text-dim);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall" style="margin:0;color:var(--text-dim);">Ene 2024</p>
+        <p class="xsmall dim" style="margin:0;">Cuentas humanas<br>operativas</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--green);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall green" style="margin:0;">2024–2025</p>
+        <p class="xsmall dim" style="margin:0;">Pipelines de datos<br>y framework</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--violet);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall violet" style="margin:0;">Q3 2025</p>
+        <p class="xsmall dim" style="margin:0;">Cuentas<br>automatizadas</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--green);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall green" style="margin:0;">2025–2026</p>
+        <p class="xsmall dim" style="margin:0;">Fine-tuning<br>y evaluación</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--white);border-radius:50%;margin:3px auto 0.4em;border:2px solid var(--green);box-sizing:border-box;"></div>
+        <p class="xsmall white" style="margin:0;">Abr 2026</p>
+        <p class="xsmall dim" style="margin:0;">Defensa</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 4 — VIDEO (PLACEHOLDER)
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
+    <h2 style="margin-bottom:0.8em;text-align:center;">Normsy en acción</h2>
+
+    <!--
+      Cuando el video esté grabado, reemplazar el bloque .vid-placeholder
+      por el siguiente elemento (descomentar):
+
+      <video controls width="84%" style="border:1px solid #2a2a2a;border-radius:4px;display:block;margin:0 auto;">
+        <source src="video/normsy_demo.mp4" type="video/mp4">
+      </video>
+    -->
+
+    <div class="vid-placeholder">
+      <div class="play">▶</div>
+      <p>video/normsy_demo.mp4</p>
+      <p class="xsmall">[ placeholder — reemplazar cuando el video esté grabado ]</p>
+    </div>
+    <p class="xsmall dim" style="margin-top:0.7em;text-align:center;">
+      Recorrido: tweet tóxico detectado → clasificado → intervención publicada →<br>
+      evento Kafka → pipeline ETL → métricas en Grafana → framework evaluando → fine-tuning en Vertex AI
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 5 — ARQUITECTURA GENERAL
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Flujo de intervención</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <p style="margin-bottom:0.55em;font-size:1.25em;">Etapas principales:</p>
+      <ol style="font-size:1.18em;line-height:2.0;margin-left:1.1em;">
+        <li>Obtención de posts monitoreados</li>
+        <li>Clasificación de toxicidad<br><span class="dim" style="font-size:0.8em;">OpenAI · Perspective · score máximo</span></li>
+        <li>Selección de estrategia de respuesta</li>
+        <li>Generación de contranarrativa</li>
+        <li>Revisión humana <span class="dim" style="font-size:0.8em;">(si no es cuenta automatizada)</span></li>
+        <li class="green">Publicación e intervención en X.com</li>
+      </ol>
+      <div class="card bar-dim" style="margin-top:0.7em;">
+        <p class="dim" style="margin:0;font-size:1.05em;line-height:1.6;">Dos modos: <span class="white">human pilot</span> con copiloto LLM<br>y <span class="white">full automatizado</span></p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame" style="width:93%;">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">normsy — flujo de intervención</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/intervention_flow_esp.png" style="width:100%;height:auto;display:block;" alt="Flujo de procesamiento de intervenciones"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 6 — TRES ÁREAS DE TRABAJO
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Áreas de trabajo del proyecto</h2></div>
+  <div class="c60-40">
+    <div class="terminal-frame">
+      <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">normsy — arquitectura de infraestructura</span></div>
+      <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/normsy_infra_v2.png" style="display:block;width:100%;height:auto;" alt="Arquitectura Normsy"></div>
+    </div>
+    <div>
+      <div class="card" style="border-left:3px solid var(--green);margin-bottom:0.6em;">
+        <p class="green bold small" style="margin:0 0 0.2em;">① Solución de datos</p>
+        <p class="xsmall dim" style="margin:0;line-height:1.6;">
+          MongoDB → PostgreSQL<br>
+          Airflow ETL · Kafka CDC · Grafana dashboards
+        </p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--violet);margin-bottom:0.6em;">
+        <p class="violet bold small" style="margin:0 0 0.2em;">② Framework de evaluación</p>
+        <p class="xsmall dim" style="margin:0;line-height:1.6;">
+          13 modelos · 5 proveedores<br>
+          Pareto costo–F1 · escala de clasificación
+        </p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--text-dim);">
+        <p class="white bold small" style="margin:0 0 0.2em;">③ Fine-tuning del clasificador</p>
+        <p class="xsmall dim" style="margin:0;line-height:1.6;">
+          SFT sobre familia Gemini · Vertex AI<br>
+          4 versiones · +64 % precisión
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 7 — PROBLEMA DE DATOS
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Solución de datos — el problema</h2></div>
+  <div class="cols">
+    <div>
+      <div class="card bar-dim" style="margin-bottom:0.55em;">
+        <p class="small dim" style="margin:0 0 0.25em;">Estado inicial</p>
+        <p class="small" style="margin:0;">
+          MongoDB Atlas como única base de datos<br>
+          → flexible para escritura, limitada para analítica<br>
+          → 800.000+ registros sin joins ni window functions
+        </p>
+      </div>
+      <div class="card bar-dim">
+        <p class="small dim" style="margin:0 0 0.25em;">Consecuencia operacional</p>
+        <p class="small" style="margin:0;">
+          Sin historial analítico explotable<br>
+          Sin dashboards de monitoreo<br>
+          Sin capacidad de análisis exploratorio sistemático
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="border:1px solid var(--green);">
+        <p class="small dim" style="margin:0 0 0.3em;">Decisión de diseño</p>
+        <p class="green bold" style="margin:0 0 0.3em;font-size:0.9em;">MongoDB → PostgreSQL</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Esquema relacional en Hetzner<br>
+          Patrón CQRS — lectura y escritura separadas<br>
+          Grafana + Jupyter sobre PostgreSQL<br>
+          <span class="dim">Sin impacto sobre la base transaccional</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 8 — BATCH + REAL-TIME
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Dos estrategias de procesamiento</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-green" style="margin-bottom:0.6em;">
+        <p class="green bold small" style="margin:0 0 0.3em;">Batch — Apache Airflow</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Sincronización completa programada<br>
+          17 colecciones MongoDB<br>
+          Resiliente: recovery automático ante fallos
+        </p>
+      </div>
+      <div class="card bar-violet">
+        <p class="violet bold small" style="margin:0 0 0.3em;">Real-time — Kafka CDC</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Change Data Capture sobre oplog MongoDB<br>
+          Debezium + Kafka + consumer Python<br>
+          Evento procesado en &lt; 1 segundo
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">airflow — arquitectura</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/airflow_architecture.png" style="display:block;width:100%;height:auto;" alt="Arquitectura Apache Airflow"></div>
+      </div>
+      <span class="img-caption">Arquitectura Apache Airflow — Scheduler, Workers, Webserver y DAG Directory</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 9a — CDC: STACK TECNOLÓGICO
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Change Data Capture — stack tecnológico</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-green" style="margin-bottom:0.55em;">
+        <p class="green bold small" style="margin:0 0 0.25em;">Kafka</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Bus de eventos distribuido<br>
+          Desacopla productores y consumidores
+        </p>
+      </div>
+      <div class="card bar-violet" style="margin-bottom:0.55em;">
+        <p class="violet bold small" style="margin:0 0 0.25em;">Debezium</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Conector CDC open-source<br>
+          Captura cambios desde el oplog de MongoDB
+        </p>
+      </div>
+      <div class="card bar-dim">
+        <p class="white bold small" style="margin:0 0 0.25em;">Kafka Connect</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Framework de integración<br>
+          Orquesta source y sink connectors
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">kafka — stack tecnológico</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/kafka_stack_flow.png" style="display:block;width:100%;height:auto;" alt="Kafka stack flow"></div>
+      </div>
+      <span class="img-caption">Kafka + Debezium + Kafka Connect — captura de cambios en tiempo real desde MongoDB</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 9b — CDC: PIPELINE EN NORMSY
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Change Data Capture — pipeline en Normsy</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-green" style="margin-bottom:0.55em;">
+        <p class="small" style="margin:0;line-height:1.7;">
+          <span class="green bold">① Captura</span><br>
+          Debezium lee el oplog de MongoDB Atlas en tiempo real
+        </p>
+      </div>
+      <div class="card bar-violet" style="margin-bottom:0.55em;">
+        <p class="small" style="margin:0;line-height:1.7;">
+          <span class="violet bold">② Transporte</span><br>
+          Kafka recibe y distribuye los eventos de cambio
+        </p>
+      </div>
+      <div class="card bar-dim" style="margin-bottom:0.55em;">
+        <p class="small" style="margin:0;line-height:1.7;">
+          <span class="white bold">③ Consumo</span><br>
+          Consumer Python persiste en PostgreSQL analítico
+        </p>
+      </div>
+      <div class="card">
+        <p class="xsmall dim" style="margin:0;line-height:1.6;">
+          Latencia end-to-end: <span class="green">&lt; 1 segundo</span><br>
+          Sin impacto sobre la base transaccional
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">CDC — pipeline Normsy</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/cdc_flow.svg" style="width:100%;max-height:44vh;display:block;" alt="CDC flow Normsy"></div>
+      </div>
+      <span class="img-caption">MongoDB oplog → Debezium → Kafka → Consumer → PostgreSQL</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 10 — GRAFANA DASHBOARD
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Dashboard Platform Insights</h2></div>
+  <div class="terminal-frame" style="margin:0 auto;max-width:95%;">
+    <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">grafana — Platform Insights</span></div>
+    <div class="terminal-body" style="padding:0.3em;"><img src="images/platform_insights.png" class="img-dark" style="max-height:44vh;" alt="Grafana Platform Insights"></div>
+  </div>
+  <span class="img-caption">
+    KPIs en tiempo real: intervenciones totales · impresiones · Normsy Impact Ratio · evolución temporal
+  </span>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 11 — HALLAZGO: CUENTAS AUTOMATIZADAS
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Análisis exploratorio — cuentas automatizadas</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card" style="margin-bottom:0.55em;">
+        <span class="stat">111.000+</span>
+        <span class="stat-label">intervenciones totales en la plataforma</span>
+      </div>
+      <div class="card" style="margin-bottom:0.55em;">
+        <span class="stat">78 %</span>
+        <span class="stat-label">del volumen total: cuentas automatizadas</span>
+      </div>
+      <div class="card bar-green">
+        <p class="small" style="margin:0;line-height:1.7;">
+          Mediana impresiones/intervención:<br>
+          Humana: <span class="green">8</span> &nbsp;·&nbsp; Automatizada: <span class="green">5</span><br>
+          <span class="dim xsmall">Calidad individual comparable — el escalado no degrada el alcance por publicación</span>
+        </p>
+      </div>
+    </div>
+    <div style="position:relative;min-height:50vh;">
+      <!-- Imagen 1: volumen trimestral (visible inicialmente, desaparece con fragment 0) -->
+      <div style="position:absolute;top:0;left:0;width:100%;">
+        <div class="terminal-frame">
+          <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — volumen trimestral</span></div>
+          <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/quarterly_volume.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Volumen trimestral por tipo de cuenta"></div>
+        </div>
+        <span class="img-caption">
+          Cuentas automatizadas desplegadas en Q3 2025 superaron<br>
+          el volumen acumulado por cuentas humanas desde 2024
+        </span>
+      </div>
+      <!-- Imagen 2: distribución de impresiones -->
+      <div class="fragment current-visible" data-fragment-index="0" style="position:absolute;top:0;left:0;width:100%;">
+        <div class="terminal-frame">
+          <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — distribución de impresiones</span></div>
+          <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/impressions_histogram.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Histograma de impresiones por tipo de cuenta"></div>
+        </div>
+        <span class="img-caption">
+          Distribución de impresiones comparable entre cuentas humanas y automatizadas<br>
+          → el escalado no degrada la calidad individual
+        </span>
+      </div>
+      <!-- Imagen 3: impacto de respuestas -->
+      <div class="fragment" data-fragment-index="1" style="position:absolute;top:0;left:0;width:100%;">
+        <div class="terminal-frame">
+          <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — impacto de respuestas</span></div>
+          <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/reply_count_with_replies.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Distribución de respuestas recibidas"></div>
+        </div>
+        <span class="img-caption">
+          Distribución de respuestas recibidas por intervención<br>
+          → las intervenciones generan interacción real
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 12 — PROBLEMA: FALSOS POSITIVOS
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Clasificador de toxicidad — el problema</h2></div>
+  <div class="cols">
+    <div>
+      <div class="card" style="border:1px solid var(--red);margin-bottom:0.55em;">
+        <p class="small" style="color:var(--red);margin:0 0 0.25em;font-weight:600;">Falsos positivos</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Post no tóxico clasificado como tóxico<br>
+          → intervención innecesaria publicada en X.com<br>
+          → fricción pública, erosión de credibilidad
+        </p>
+      </div>
+      <div class="card" style="border:1px solid var(--red);">
+        <p class="small" style="color:var(--red);margin:0 0 0.25em;font-weight:600;">Impacto operacional</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          Recursos de inferencia desperdiciados<br>
+          Generación de respuestas contraproducentes<br>
+          Riesgo reputacional para la plataforma
+        </p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
+      <div class="card" style="text-align:center;padding:1.5em 2em;">
+        <p class="small dim" style="margin:0 0 0.4em;">Precisión — baseline producción (escala 0–10)</p>
+        <span class="stat" style="font-size:3em;color:var(--orange);">0.396</span>
+        <p class="small dim" style="margin:0.6em 0 0;">≈ 1 de cada 2.5 intervenciones<br>se activa sobre contenido no tóxico</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 13 — FRAMEWORK DE EVALUACIÓN
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Framework de evaluación de clasificadores</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <ul style="font-size:1.08em;margin-bottom:0.7em;line-height:2.0;">
+        <li><span class="green">13 modelos</span> de 5 proveedores</li>
+        <li>Escalas: 0–10, 0–3 y binaria</li>
+        <li>Métricas: F1, precisión, recall, <span class="violet">costo USD</span>, latencia</li>
+        <li>Dataset golden: <span class="green">400 posts</span> (100 por clase)</li>
+        <li>Persistencia en PostgreSQL</li>
+        <li>Reproducible: YAML versionado en Git</li>
+      </ul>
+      <div class="card" style="margin-bottom:0.55em;">
+        <p style="margin:0;line-height:2.0;font-size:0.95em;">
+          <span class="tag">OpenAI</span>
+          <span class="tag">Google</span>
+          <span class="tag">Anthropic</span>
+          <span class="tag">xAI</span>
+          <span class="tag">Alibaba Cloud</span>
+        </p>
+      </div>
+      <div style="display:flex;gap:0.5em;">
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
+          <span class="stat" style="font-size:1.6em;">13</span>
+          <span class="stat-label">modelos evaluados</span>
+        </div>
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
+          <span class="stat" style="font-size:1.6em;color:var(--violet);">3</span>
+          <span class="stat-label">escalas de<br>clasificación</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">framework — arquitectura</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/framework_architecture.png" style="display:block;width:100%;height:auto;" alt="Arquitectura del framework"></div>
+      </div>
+      <span class="img-caption">CLI como punto de entrada único — coordina clasificación, persistencia y métricas</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 13b — FRAMEWORK: CONFIGURACIÓN YAML
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Framework — configuración de experimentos</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-green" style="margin-bottom:0.55em;">
+        <p class="bold small" style="margin:0 0 0.25em;color:var(--green);">Un YAML define un experimento</p>
+        <p style="margin:0;line-height:1.8;font-size:0.85em;">
+          Dataset, modelos, prompts y escala<br>
+          en un único archivo versionado en Git
+        </p>
+      </div>
+      <div class="card bar-violet" style="margin-bottom:0.55em;">
+        <p class="bold small" style="margin:0 0 0.25em;color:var(--violet);">Ejecución</p>
+        <p style="margin:0;line-height:1.8;font-size:0.85em;">
+          El CLI recorre cada combinación<br>
+          modelo × prompt automáticamente
+        </p>
+      </div>
+      <div class="card bar-dim">
+        <p class="bold small" style="margin:0 0 0.25em;color:var(--white);">Reproducibilidad</p>
+        <p style="margin:0;line-height:1.8;font-size:0.85em;">
+          Mismo YAML → mismos resultados<br>
+          Persistidos en PostgreSQL con timestamp
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">params_03.yml — 13 modelos × 3 prompts = 39 evaluaciones</span></div>
+        <div class="terminal-body" style="padding:0.6em 0.8em;">
+<pre style="margin:0;font-size:0.68em;line-height:1.65;color:var(--text);font-family:var(--font);"><span class="green">test:</span>
+  <span class="dim">name:</span> <span style="color:#e6db74;">"Multi-Provider Toxicity Classification"</span>
+
+  <span class="dim">dataset:</span>
+    <span class="dim">name:</span> <span style="color:#e6db74;">"ground_truth"</span>
+
+  <span class="green">models:</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"gemini-2.5-flash"</span>        <span class="dim"># Google</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"gpt-4.1-2025-04-14"</span>      <span class="dim"># OpenAI</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"grok-4-fast-non-reasoning"</span> <span class="dim"># xAI</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"claude-haiku-4-5"</span>        <span class="dim"># Anthropic</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"qwen-flash"</span>              <span class="dim"># Alibaba</span>
+    <span class="dim">  ... (13 modelos total)</span>
+
+  <span class="violet">prompts:</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"toxicity_3_prod.jinja2"</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"toxicity_3_alternative.jinja2"</span>
+    - <span class="dim">name:</span> <span style="color:#e6db74;">"basic_tox_notox_0_3.jinja2"</span>
+
+  <span class="green">settings:</span>
+    <span class="dim">retry_attempts:</span> 3
+    <span class="dim">prompt_scale:</span> [0, 3]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow timeline -->
+  <div style="margin-top:1.2em;position:relative;padding:0 1em;">
+    <div style="position:absolute;top:8px;left:1em;right:1em;height:2px;background:var(--border);"></div>
+    <div style="display:flex;justify-content:space-between;position:relative;">
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--green);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall green" style="margin:0;">① CLI</p>
+        <p class="xsmall dim" style="margin:0;">Lee YAML</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--green);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall green" style="margin:0;">② Dataset</p>
+        <p class="xsmall dim" style="margin:0;">Carga golden</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--violet);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall violet" style="margin:0;">③ Clasificación</p>
+        <p class="xsmall dim" style="margin:0;">modelo × prompt</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--violet);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall violet" style="margin:0;">④ Métricas</p>
+        <p class="xsmall dim" style="margin:0;">F1, precisión, recall</p>
+      </div>
+      <div style="text-align:center;flex:0 0 auto;">
+        <div style="width:10px;height:10px;background:var(--white);border-radius:50%;margin:3px auto 0.4em;"></div>
+        <p class="xsmall white" style="margin:0;">⑤ Persistencia</p>
+        <p class="xsmall dim" style="margin:0;">PostgreSQL</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 14 — ESCALA: 0-10 vs 0-3
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Evolución de la escala de clasificación</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-dim" style="margin-bottom:0.6em;">
+        <p style="color:var(--text-dim);margin:0 0 0.3em;font-weight:600;font-size:0.92em;">Escala 0–10 (producción inicial)</p>
+        <p style="margin:0;line-height:1.8;font-size:0.88em;">
+          Alta ambigüedad entre niveles intermedios<br>
+          Ruido subjetivo en la anotación manual<br>
+          Alta dispersión inter-clase para los modelos
+        </p>
+      </div>
+      <div class="card bar-green" style="margin-bottom:0.6em;">
+        <p class="green bold" style="margin:0 0 0.3em;font-size:0.92em;">Escala 0–3 (propuesta)</p>
+        <p style="margin:0;line-height:1.8;font-size:0.88em;">
+          Menor ambigüedad de anotación<br>
+          Más ejemplos por clase<br>
+          Misma resolución analítica útil
+        </p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="stat" style="font-size:1.8em;">+16.6 %</span>
+        <span class="stat-label">mejora en F1 en todos los modelos evaluados</span>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">evaluate.py — F1 por escala</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/toxicity/scale_comparison_f1.svg" style="display:block;width:100%;height:auto;" alt="Comparación F1 por escala"></div>
+      </div>
+      <span class="img-caption">
+        Colapso 0–10 → 0–3: mejora consistente en F1 binario
+      </span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 15 — FRONTERA DE PARETO
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Selección de modelo — frontera de Pareto</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <p style="margin-bottom:0.7em;font-size:0.95em;">Modelos sobre la frontera:</p>
+      <ul style="font-size:0.95em;margin-bottom:0.8em;line-height:2.0;">
+        <li class="green">grok-4-fast-non-reasoning</li>
+        <li class="green">gemini-2.0-flash</li>
+        <li class="green">gemini-2.5-flash-lite</li>
+        <li class="green">qwen-flash</li>
+      </ul>
+      <div class="card bar-violet" style="margin-bottom:0.55em;">
+        <p style="margin:0;line-height:1.8;font-size:0.88em;">
+          Ninguna combinación con escala 0–10 alcanza la frontera<br>
+          <span class="dim">→ confirma superioridad de escala 0–3</span>
+        </p>
+      </div>
+      <div class="card bar-dim">
+        <p class="xsmall dim" style="margin:0;line-height:1.6;">
+          Eje X: costo total (USD)<br>
+          Eje Y: F1 binario<br>
+          Color: tiempo de procesamiento
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">evaluate.py — Pareto costo vs F1</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/toxicity/cost_vs_accuracy_time.svg" style="display:block;width:100%;height:auto;" alt="Frontera de Pareto — costo vs F1 binario"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 16a — PRECISIÓN BASELINE
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>El problema: precisión baja en modelos base</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-orange" style="margin-bottom:0.6em;">
+        <p class="small dim" style="margin:0 0 0.25em;">Baseline de producción (0–10)</p>
+        <span class="stat" style="color:var(--orange);">0.396</span>
+        <span class="small dim" style="display:block;margin-top:0.1em;">precisión binaria</span>
+      </div>
+      <div class="card bar-violet" style="margin-bottom:0.6em;">
+        <p class="small" style="margin:0;line-height:1.7;">
+          Costo asimétrico:<br>
+          intervenir sobre contenido <span class="violet">no tóxico</span><br>
+          es más costoso que omitir uno tóxico
+        </p>
+      </div>
+      <div class="card bar-dim" style="margin-bottom:0.6em;">
+        <p class="small" style="margin:0;line-height:1.6;">
+          Alta tasa de falsos positivos<br>
+          en todos los modelos evaluados<br>
+          <span class="dim xsmall">→ motiva el fine-tuning orientado a precisión</span>
+        </p>
+      </div>
+      <div class="card bar-green">
+        <p class="small" style="margin:0;line-height:1.6;">
+          El framework permitió <span class="green bold">detectar</span> esta debilidad<br>
+          y <span class="green bold">evaluar sistemáticamente</span> alternativas<br>
+          <span class="dim xsmall">→ sin el framework, la baja precisión no era visible</span>
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="terminal-bar-title">evaluate.py — binary_0_3_precision · baseline</span>
+        </div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;">
+          <img src="images/toxicity/binary_0_3_precision.svg" style="display:block;width:100%;height:auto;" alt="Precisión — modelos binarios baseline">
+        </div>
+      </div>
+      <span class="img-caption">Precisión binaria — modelos baseline escala 0–3</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE — TRANSICIÓN: HIPÓTESIS FINE-TUNING
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="section-div">
+    <h1>¿Puede el fine-tuning<br>mejorar la precisión?</h1>
+    <p style="font-size:0.95em;color:var(--text);margin-top:0.8em;line-height:1.8;">
+      El framework detectó que todos los modelos base tienen <span class="orange">baja precisión</span>.<br>
+      Hipótesis: ajustar un modelo con datos del dominio puede reducir<br>
+      los falsos positivos y mejorar el rendimiento general.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE — FINE-TUNING EN VERTEX AI
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Fine-tuning — Vertex AI</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card" style="margin-bottom:0.6em;">
+        <p class="small dim" style="margin:0 0 0.2em;">Dataset</p>
+        <p class="small" style="margin:0;line-height:1.7;">
+          <span class="green">1.514 posts</span> curados por Civic Health Project<br>
+          1.289 entrenamiento · 225 validación<br>
+          400 evaluación (golden — sin exposición al SFT)
+        </p>
+      </div>
+      <table style="margin-top:0.3em;">
+        <thead>
+          <tr><th>Versión</th><th>Modelo base</th><th>Escala</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>v1</td><td>gemini-2.5-flash</td><td>0–3</td></tr>
+          <tr><td>v2</td><td>gemini-2.5-flash-lite</td><td>0–3</td></tr>
+          <tr class="hl"><td>v3</td><td>gemini-2.0-flash-001</td><td>0–3</td></tr>
+          <tr><td>v4</td><td>gemini-2.5-flash</td><td>Binaria</td></tr>
+        </tbody>
+      </table>
+      <p class="xsmall dim" style="margin-top:0.5em;line-height:1.6;">
+        Técnica: LoRA (Low-Rank Adaptation)<br>
+        Cada versión: endpoint dedicado en Vertex AI
+      </p>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="terminal-bar-title">Vertex AI — SFT v2 · gemini-2.5-flash-lite</span>
+        </div>
+        <div class="terminal-body" style="padding:0.3em;">
+          <img src="images/sft_03_25_flash_lite.png" class="img-dark" style="max-height:40vh;display:block;" alt="Curvas SFT Vertex AI">
+        </div>
+      </div>
+      <span class="img-caption">Curvas de entrenamiento v2 — accuracy y loss (Vertex AI)</span>
+      <div class="card bar-dim" style="margin-top:0.55em;">
+        <p class="small" style="margin:0;line-height:1.6;">
+          v4: 1.300 ejemplos insuficientes para superar el conocimiento previo del modelo base<br>
+          <span class="dim xsmall">→ escalar el dataset es el paso natural</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE — PRECISIÓN SFT vs BASELINE
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>La solución: fine-tuning mejora la precisión</h2></div>
+  <div class="c40-60" style="align-items:start;">
+    <div>
+      <div class="card bar-green" style="margin-bottom:0.6em;">
+        <p class="small dim" style="margin:0 0 0.25em;">SFT v3 — gemini-2.0-flash</p>
+        <span class="stat">0.649</span>
+        <span class="green small" style="display:block;margin-top:0.1em;">+64.1 % vs baseline</span>
+      </div>
+      <div class="card bar-dim" style="margin-bottom:0.6em;">
+        <p class="small" style="margin:0;line-height:1.7;">
+          Los modelos SFT superan<br>
+          consistentemente al baseline<br>
+          de producción en precisión
+        </p>
+      </div>
+      <div class="card bar-violet">
+        <p class="small" style="margin:0;line-height:1.6;">
+          Menos intervenciones incorrectas<br>
+          <span class="violet">mayor confianza operacional</span>
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="terminal-frame">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="terminal-bar-title">evaluate.py — binary_0_3_filtered · SFT vs baseline</span>
+        </div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;">
+          <img src="images/toxicity/binary_0_3_filtered_precision.svg" style="display:block;width:100%;height:auto;" alt="Precisión — modelos SFT vs. baseline">
+        </div>
+      </div>
+      <span class="img-caption">Precisión — modelos SFT vs. baseline de producción</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 20 — TABLA RESUMEN FINAL
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Resultados comparativos</h2></div>
+  <table style="margin-top:0.4em;font-size:0.88em;">
+    <thead>
+      <tr>
+        <th>Configuración</th>
+        <th>Mejor modelo</th>
+        <th style="text-align:right;">F1</th>
+        <th style="text-align:right;">Precisión</th>
+        <th style="text-align:right;">Recall</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0–10 <span class="dim">(baseline producción)</span></td>
+        <td>gemini-2.5-flash</td>
+        <td style="text-align:right;">0.529</td>
+        <td style="text-align:right;color:var(--orange);">0.409</td>
+        <td style="text-align:right;">0.749</td>
+      </tr>
+      <tr>
+        <td>0–3 <span class="dim">(sin SFT)</span></td>
+        <td>gemini-2.5-flash-lite</td>
+        <td style="text-align:right;">0.611</td>
+        <td style="text-align:right;">0.465</td>
+        <td style="text-align:right;">0.891</td>
+      </tr>
+      <tr>
+        <td>0–3 SFT v3</td>
+        <td>sft_gemini-2.0-flash:v3</td>
+        <td style="text-align:right;">0.604</td>
+        <td style="text-align:right;color:var(--green);">0.649</td>
+        <td style="text-align:right;">0.565</td>
+      </tr>
+      <tr class="hl">
+        <td>Binaria <span class="dim">(prompt base, sin SFT)</span></td>
+        <td>gemini-2.5-flash</td>
+        <td style="text-align:right;"><strong>0.714</strong></td>
+        <td style="text-align:right;"><strong>0.654</strong></td>
+        <td style="text-align:right;"><strong>0.785</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display:flex;gap:0.6em;margin-top:1em;">
+    <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
+      <span class="stat" style="font-size:1.6em;color:var(--orange);">0.396</span>
+      <span class="stat-label">precisión baseline</span>
+    </div>
+    <div style="flex:0 0 auto;display:flex;align-items:center;color:var(--text-dim);font-size:1.2em;">→</div>
+    <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
+      <span class="stat" style="font-size:1.6em;">0.649</span>
+      <span class="stat-label">SFT v3 (+64 %)</span>
+    </div>
+    <div style="flex:0 0 auto;display:flex;align-items:center;color:var(--text-dim);font-size:1.2em;">→</div>
+    <div style="flex:1;background:var(--bg-card);border:1px solid var(--green);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
+      <span class="stat" style="font-size:1.6em;color:var(--violet);">0.668</span>
+      <span class="stat-label">prompt binario (+68.9 %)</span>
+    </div>
+  </div>
+
+  <div class="card bar-green" style="margin-top:0.7em;">
+    <p class="small" style="margin:0;line-height:1.7;">
+      Dataset golden: 400 posts balanceados (100 por clase), sin exposición al entrenamiento<br>
+      <span class="dim xsmall">La mejora de precisión del SFT implica reducción en recall — equilibrio aceptable dado el costo asimétrico</span>
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 21 — HALLAZGO INESPERADO
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Hallazgo inesperado</h2></div>
+  <div class="cols">
+    <div>
+      <div class="card" style="border:1px solid var(--violet);margin-bottom:0.55em;">
+        <p class="violet bold small" style="margin:0 0 0.25em;">Prompt binario sobre modelo base</p>
+        <p class="small" style="margin:0;">
+          Precisión: <span class="violet bold">0.668</span> &nbsp;·&nbsp; F1: <span class="violet bold">0.714</span>
+        </p>
+        <p class="xsmall dim" style="margin:0.3em 0 0;">Sin ningún entrenamiento adicional</p>
+      </div>
+      <div class="card bar-dim">
+        <p class="small dim" style="margin:0 0 0.25em;">SFT v4 (entrenado en escala binaria)</p>
+        <p class="small" style="margin:0;">
+          Precisión: 0.654 &nbsp;·&nbsp; F1: 0.714
+        </p>
+        <p class="xsmall dim" style="margin:0.3em 0 0;">Con 1.300 ejemplos de entrenamiento</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.6em;">
+      <div class="card bar-violet">
+        <p class="small" style="margin:0;line-height:1.7;">
+          El modelo base ya contiene conocimiento relevante sobre toxicidad en el dominio político-partidario
+        </p>
+      </div>
+      <div class="card bar-green">
+        <p class="small" style="margin:0;line-height:1.7;">
+          1.300 ejemplos insuficientes para superar ese conocimiento previo en tarea directamente binaria
+        </p>
+      </div>
+      <div class="card">
+        <p class="small dim" style="margin:0;line-height:1.7;">
+          El prompt binario sobre modelo base constituye una alternativa de menor costo operacional con rendimiento comparable al SFT actual
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 22 — IMPACTO EN PRODUCCIÓN
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="sh"><h2>Impacto en producción</h2></div>
+  <p style="margin-bottom:1.2em;font-size:1.1em;color:var(--text-dim);">
+    Resultados presentados en tres instancias al equipo de Civic Health Project — decisiones concretas adoptadas:
+  </p>
+  <div style="display:flex;flex-direction:column;gap:1em;width:100%;">
+    <div class="card" style="border:1px solid var(--green);display:flex;align-items:center;gap:1.2em;padding:1em 1.4em;">
+      <p class="green bold" style="margin:0;font-size:1.2em;white-space:nowrap;">① Cambio de escala</p>
+      <p style="margin:0;line-height:1.5;font-size:1.05em;">Migración de clasificación 0–10 → 0–3 en producción</p>
+    </div>
+    <div class="card" style="border:1px solid var(--violet);display:flex;align-items:center;gap:1.2em;padding:1em 1.4em;">
+      <p class="violet bold" style="margin:0;font-size:1.2em;white-space:nowrap;">② Selección de modelo</p>
+      <p style="margin:0;line-height:1.5;font-size:1.05em;">Familia Gemini adoptada como clasificador de producción</p>
+    </div>
+    <div class="card" style="border:1px solid var(--text-dim);display:flex;align-items:center;gap:1.2em;padding:1em 1.4em;">
+      <p class="white bold" style="margin:0;font-size:1.2em;white-space:nowrap;">③ Escalado automatizado</p>
+      <p style="margin:0;line-height:1.5;font-size:1.05em;">Despliegue de cuentas automatizadas → 111.000+ intervenciones publicadas</p>
+    </div>
+    <div class="card bar-green" style="padding:1em 1.4em;">
+      <p style="margin:0;font-size:1.1em;line-height:1.7;">
+        <span class="green">Primera explotación sistemática</span> de los datos históricos de Normsy desde su puesta en producción en enero de 2023
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 23 — CONCLUSIONES Y PRÓXIMOS PASOS
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div class="cols" style="align-items:start;">
+    <div>
+      <div class="sh"><h2>Conclusiones</h2></div>
+      <ul style="font-size:1.1em;line-height:2.4;">
+        <li>Pipeline analítico habilita por primera vez análisis histórico sistemático</li>
+        <li>Cuentas automatizadas escalan volumen sin degradar calidad individual</li>
+        <li>Escala 0–10 → 0–3: mejora consistente en todos los modelos</li>
+        <li>SFT mejora precisión en <span class="green">+64 %</span> vs baseline</li>
+        <li>Prompt binario: alternativa competitiva sin entrenamiento</li>
+      </ul>
+    </div>
+    <div>
+      <div class="sh"><h2 style="color:var(--violet);">Próximos pasos</h2></div>
+      <div class="card" style="margin-bottom:0.7em;">
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="green bold">① Dataset</span> — escalar el conjunto de ajuste para convergencia del SFT</p>
+      </div>
+      <div class="card" style="margin-bottom:0.7em;">
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="violet bold">② DPO</span> — Direct Preference Optimization para balance precisión/recall más controlado</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="white bold">③ Embeddings multimodales</span> — LLM → embeddings → SVM/XGBoost, elimina costo de inferencia por post</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 24 — CIERRE / AGRADECIMIENTOS
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;padding:2.2em 2.5em;position:relative;text-align:center;">
+    <h1 style="font-size:3.5em;margin-bottom:0.4em;line-height:1.3;">
+      Muchas gracias
+    </h1>
+    <p style="font-size:1.8em;margin-bottom:1.4em;color:var(--green);">
+      ¿Preguntas?
+    </p>
+    <div style="display:flex;gap:1.4em;margin-bottom:1.6em;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1em 1.6em;text-align:center;">
+        <span class="stat" style="font-size:2.2em;">111.000+</span>
+        <span class="stat-label" style="font-size:0.85em;">intervenciones</span>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1em 1.6em;text-align:center;">
+        <span class="stat" style="font-size:2.2em;color:var(--violet);">+64 %</span>
+        <span class="stat-label" style="font-size:0.85em;">precisión SFT</span>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1em 1.6em;text-align:center;">
+        <span class="stat" style="font-size:2.2em;">0.714</span>
+        <span class="stat-label" style="font-size:0.85em;">F1 score</span>
+      </div>
+    </div>
+    <p style="font-size:1.15em;color:var(--white);">
+      Mg. Ing. Joaquín González · CEIA FIUBA · Abril 2026
+    </p>
+  </div>
+</section>
+
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<!-- ============================================================
+     Reveal.js — configuración
+     ============================================================ -->
+<script src="vendor/reveal/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    // Navegación — igual a PPT: flechas + espacio
+    controls:         true,
+    controlsTutorial: false,
+    progress:         true,
+    slideNumber:      'c/t',
+    hash:             true,
+    keyboard:         true,
+    overview:         true,   // tecla ESC para vista en grilla
+
+    // Dimensiones 16:9 HD — igual a PPT estándar
+    width:    1280,
+    height:   720,
+    margin:   0.05,
+    minScale: 0.15,
+    maxScale: 2.0,
+
+    // Transiciones
+    transition:           'fade',
+    transitionSpeed:      'fast',
+    backgroundTransition: 'none',
+
+    // PDF export
+    pdfMaxPagesPerSlide:  1,
+    pdfSeparateFragments: false,
+
+    // Fragmentos
+    fragments: true,
+  });
+
+  /* ---- Matrix rain — only on slide 1 ---- */
+  (function() {
+    var canvas = document.getElementById('matrix-bg');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H, columns, drops;
+    var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+    var fontSize = 14;
+    var animId = null;
+
+    function resize(randomize) {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      columns = Math.floor(W / fontSize);
+      var maxRow = Math.floor(H / fontSize);
+      drops = [];
+      for (var i = 0; i < columns; i++) {
+        drops[i] = randomize ? Math.floor(Math.random() * maxRow) : 1;
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(13,13,13,0.15)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#39ff14';
+      ctx.font = fontSize + 'px monospace';
+      for (var i = 0; i < columns; i++) {
+        var ch = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > H && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    function start(randomize) { canvas.style.display = 'block'; resize(randomize); if (!animId) animId = setInterval(draw, 50); }
+    function stop()  { canvas.style.display = 'none'; if (animId) { clearInterval(animId); animId = null; } }
+
+    window.addEventListener('resize', function() { if (animId) resize(); });
+
+    var lastSlide = Reveal.getTotalSlides() - 1;
+    function isMatrixSlide(h) { return h === 0 || h === lastSlide; }
+
+    Reveal.on('slidechanged', function(e) {
+      if (isMatrixSlide(e.indexh)) start(e.indexh === lastSlide); else stop();
+    });
+    Reveal.on('ready', function(e) {
+      lastSlide = Reveal.getTotalSlides() - 1;
+      if (isMatrixSlide(e.indexh)) start();
+    });
+  })();
+</script>
+</body>
+</html>
