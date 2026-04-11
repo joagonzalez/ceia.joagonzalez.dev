@@ -331,13 +331,7 @@
     .reveal.print-pdf .terminal-body[style*="height:34vh"] {
       height: 245px !important;
     }
-    .reveal.print-pdf img.img-slide2 {
-      max-height: 288px !important;
-    }
-    .reveal.print-pdf .terminal-body img[style*="max-height:44vh"] {
-      max-height: 245px !important;
-    }
-    .reveal.print-pdf [style*="min-height:50vh"] {
+.reveal.print-pdf [style*="min-height:50vh"] {
       min-height: 360px !important;
     }
     /* In print, hide fragment overlays so only first image shows */
@@ -399,7 +393,7 @@
     <div style="text-align:center;">
       <div class="terminal-frame" style="display:inline-block;">
         <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">X.com — intervención Normsy</span></div>
-        <div class="terminal-body" style="padding:0.3em;line-height:0;"><img src="images/normsy_intervention_screenshot.png" class="img-slide2" style="display:block;width:auto;max-height:40vh;" alt="Intervención Normsy"></div>
+        <div class="terminal-body" style="padding:0.3em;line-height:0;"><img src="images/normsy_intervention_screenshot.png" class="img-slide2" style="display:block;width:auto;max-height:420px;" alt="Intervención Normsy"></div>
       </div>
       <span class="img-caption">Intervención generada automáticamente por Normsy en X.com</span>
     </div>
@@ -743,7 +737,7 @@
   <div class="sh"><h2>Dashboard Platform Insights</h2></div>
   <div class="terminal-frame" style="margin:0 auto;max-width:95%;">
     <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">grafana — Platform Insights</span></div>
-    <div class="terminal-body" style="padding:0.3em;"><img src="images/platform_insights.png" class="img-dark" style="max-height:44vh;" alt="Grafana Platform Insights"></div>
+    <div class="terminal-body" style="padding:0.3em;"><img src="images/platform_insights.png" class="img-dark" style="max-height:560px;" alt="Grafana Platform Insights"></div>
   </div>
   <span class="img-caption">
     KPIs en tiempo real: intervenciones totales · impresiones · Normsy Impact Ratio · evolución temporal
@@ -775,8 +769,8 @@
       </div>
     </div>
     <div style="position:relative;min-height:50vh;">
-      <!-- Imagen 1: volumen trimestral (visible inicialmente, desaparece con fragment 0) -->
-      <div style="position:absolute;top:0;left:0;width:100%;">
+      <!-- Imagen 1: volumen trimestral (visible inicialmente, fades out when image 2 appears) -->
+      <div class="fragment fade-out" data-fragment-index="0" style="position:absolute;top:0;left:0;width:100%;">
         <div class="terminal-frame">
           <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — volumen trimestral</span></div>
           <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/quarterly_volume.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Volumen trimestral por tipo de cuenta"></div>
@@ -786,8 +780,8 @@
           el volumen acumulado por cuentas humanas desde 2024
         </span>
       </div>
-      <!-- Imagen 2: distribución de impresiones -->
-      <div class="fragment current-visible" data-fragment-index="0" style="position:absolute;top:0;left:0;width:100%;">
+      <!-- Imagen 2: distribución de impresiones (same index 0 = simultaneous with image 1 fade-out) -->
+      <div class="fragment fade-in-then-out" data-fragment-index="0" style="position:absolute;top:0;left:0;width:100%;">
         <div class="terminal-frame">
           <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — distribución de impresiones</span></div>
           <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/impressions_histogram.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Histograma de impresiones por tipo de cuenta"></div>
@@ -797,8 +791,8 @@
           → el escalado no degrada la calidad individual
         </span>
       </div>
-      <!-- Imagen 3: impacto de respuestas -->
-      <div class="fragment" data-fragment-index="1" style="position:absolute;top:0;left:0;width:100%;">
+      <!-- Imagen 3: impacto de respuestas (same index 1 = simultaneous with image 2 fade-out) -->
+      <div class="fragment fade-in" data-fragment-index="1" style="position:absolute;top:0;left:0;width:100%;">
         <div class="terminal-frame">
           <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — impacto de respuestas</span></div>
           <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/reply_count_with_replies.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Distribución de respuestas recibidas"></div>
