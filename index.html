@@ -26,7 +26,7 @@
       --bg-card:   #161616;
       --bg-card2:  #1e1e1e;
       --text:      #d8d8d8;
-      --text-dim:  #909090;
+      --text-dim:  #b8b8b8;
       --border:    #2a2a2a;
       --green:     #39ff14;
       --violet:    #bf5fff;
@@ -73,9 +73,17 @@
     .reveal .progress { color: var(--green); height: 3px; }
     .reveal .slide-number {
       background: transparent;
-      color: var(--text-dim);
+      color: var(--white);
       font-family: var(--font);
-      font-size: 0.6em;
+      font-size: 1.15em;
+    }
+
+    /* Mover flechas de navegación a la esquina inferior izquierda */
+    .reveal .controls {
+      right: auto !important;
+      left: var(--r-controls-spacing) !important;
+      width: 10em;
+      height: 10em;
     }
 
     /* ============================================================
@@ -89,8 +97,8 @@
     .white    { color: var(--white); }
     .center   { text-align: center; }
     .bold     { font-weight: 700; }
-    .small    { font-size: 0.78em; }
-    .xsmall   { font-size: 0.70em; }
+    .small    { font-size: 0.85em; }
+    .xsmall   { font-size: 0.78em; }
 
     /* Stat block */
     .stat {
@@ -102,7 +110,7 @@
     }
     .stat-label {
       display: block;
-      font-size: 0.68em;
+      font-size: 0.75em;
       color: var(--text-dim);
       line-height: 1.4;
     }
@@ -163,7 +171,7 @@
     }
     .img-caption {
       display: block;
-      font-size: 0.62em;
+      font-size: 0.72em;
       color: #c0c0c0;
       text-align: center;
       margin-top: 0.4em;
@@ -192,7 +200,7 @@
     .reveal table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.72em;
+      font-size: 0.80em;
     }
     .reveal table th {
       color: var(--green);
@@ -834,8 +842,8 @@
     <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
       <div class="card" style="text-align:center;padding:1.5em 2em;">
         <p class="small dim" style="margin:0 0 0.4em;">Precisión — baseline producción (escala 0–10)</p>
-        <span class="stat" style="font-size:3em;color:var(--orange);">0.396</span>
-        <p class="small dim" style="margin:0.6em 0 0;">≈ 1 de cada 2.5 intervenciones<br>se activa sobre contenido no tóxico</p>
+        <span class="stat" style="font-size:3em;color:var(--orange);">0,396</span>
+        <p class="small dim" style="margin:0.6em 0 0;">≈ 1 de cada 2,5 intervenciones<br>se activa sobre contenido no tóxico</p>
       </div>
     </div>
   </div>
@@ -1006,7 +1014,7 @@
         </p>
       </div>
       <div class="card" style="text-align:center;">
-        <span class="stat" style="font-size:1.8em;">+16.6 %</span>
+        <span class="stat" style="font-size:1.8em;">+16,6 %</span>
         <span class="stat-label">mejora en F1 en todos los modelos evaluados</span>
       </div>
     </div>
@@ -1070,7 +1078,7 @@
     <div>
       <div class="card bar-orange" style="margin-bottom:0.6em;">
         <p class="small dim" style="margin:0 0 0.25em;">Baseline de producción (0–10)</p>
-        <span class="stat" style="color:var(--orange);">0.396</span>
+        <span class="stat" style="color:var(--orange);">0,396</span>
         <span class="small dim" style="display:block;margin-top:0.1em;">precisión binaria</span>
       </div>
       <div class="card bar-violet" style="margin-bottom:0.6em;">
@@ -1153,7 +1161,7 @@
         </tbody>
       </table>
       <p class="xsmall dim" style="margin-top:0.5em;line-height:1.6;">
-        Técnica: LoRA (Low-Rank Adaptation)<br>
+        Técnica: LoRA (<em>Low-Rank Adaptation</em>)<br>
         Cada versión: endpoint dedicado en Vertex AI
       </p>
     </div>
@@ -1188,8 +1196,8 @@
     <div>
       <div class="card bar-green" style="margin-bottom:0.6em;">
         <p class="small dim" style="margin:0 0 0.25em;">SFT v3 — gemini-2.0-flash</p>
-        <span class="stat">0.649</span>
-        <span class="green small" style="display:block;margin-top:0.1em;">+64.1 % vs baseline</span>
+        <span class="stat">0,649</span>
+        <span class="green small" style="display:block;margin-top:0.1em;">+64,1 % vs baseline</span>
       </div>
       <div class="card bar-dim" style="margin-bottom:0.6em;">
         <p class="small" style="margin:0;line-height:1.7;">
@@ -1240,48 +1248,48 @@
       <tr>
         <td>0–10 <span class="dim">(baseline producción)</span></td>
         <td>gemini-2.5-flash</td>
-        <td style="text-align:right;">0.529</td>
-        <td style="text-align:right;color:var(--orange);">0.409</td>
-        <td style="text-align:right;">0.749</td>
+        <td style="text-align:right;">0,529</td>
+        <td style="text-align:right;color:var(--orange);">0,409</td>
+        <td style="text-align:right;">0,749</td>
       </tr>
       <tr>
         <td>0–3 <span class="dim">(sin SFT)</span></td>
         <td>gemini-2.5-flash-lite</td>
-        <td style="text-align:right;">0.611</td>
-        <td style="text-align:right;">0.465</td>
-        <td style="text-align:right;">0.891</td>
+        <td style="text-align:right;">0,611</td>
+        <td style="text-align:right;">0,465</td>
+        <td style="text-align:right;">0,891</td>
       </tr>
       <tr>
         <td>0–3 SFT v3</td>
         <td>sft_gemini-2.0-flash:v3</td>
-        <td style="text-align:right;">0.604</td>
-        <td style="text-align:right;color:var(--green);">0.649</td>
-        <td style="text-align:right;">0.565</td>
+        <td style="text-align:right;">0,604</td>
+        <td style="text-align:right;color:var(--green);">0,649</td>
+        <td style="text-align:right;">0,565</td>
       </tr>
       <tr class="hl">
         <td>Binaria <span class="dim">(prompt base, sin SFT)</span></td>
         <td>gemini-2.5-flash</td>
-        <td style="text-align:right;"><strong>0.714</strong></td>
-        <td style="text-align:right;"><strong>0.654</strong></td>
-        <td style="text-align:right;"><strong>0.785</strong></td>
+        <td style="text-align:right;"><strong>0,714</strong></td>
+        <td style="text-align:right;"><strong>0,654</strong></td>
+        <td style="text-align:right;"><strong>0,785</strong></td>
       </tr>
     </tbody>
   </table>
 
   <div style="display:flex;gap:0.6em;margin-top:1em;">
     <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
-      <span class="stat" style="font-size:1.6em;color:var(--orange);">0.396</span>
+      <span class="stat" style="font-size:1.6em;color:var(--orange);">0,396</span>
       <span class="stat-label">precisión baseline</span>
     </div>
     <div style="flex:0 0 auto;display:flex;align-items:center;color:var(--text-dim);font-size:1.2em;">→</div>
     <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
-      <span class="stat" style="font-size:1.6em;">0.649</span>
+      <span class="stat" style="font-size:1.6em;">0,649</span>
       <span class="stat-label">SFT v3 (+64 %)</span>
     </div>
     <div style="flex:0 0 auto;display:flex;align-items:center;color:var(--text-dim);font-size:1.2em;">→</div>
     <div style="flex:1;background:var(--bg-card);border:1px solid var(--green);border-radius:3px;padding:0.7em 0.9em;text-align:center;">
-      <span class="stat" style="font-size:1.6em;color:var(--violet);">0.668</span>
-      <span class="stat-label">prompt binario (+68.9 %)</span>
+      <span class="stat" style="font-size:1.6em;color:var(--violet);">0,668</span>
+      <span class="stat-label">prompt binario (+68,9 %)</span>
     </div>
   </div>
 
@@ -1304,14 +1312,14 @@
       <div class="card" style="border:1px solid var(--violet);margin-bottom:0.55em;">
         <p class="violet bold small" style="margin:0 0 0.25em;">Prompt binario sobre modelo base</p>
         <p class="small" style="margin:0;">
-          Precisión: <span class="violet bold">0.668</span> &nbsp;·&nbsp; F1: <span class="violet bold">0.714</span>
+          Precisión: <span class="violet bold">0,668</span> &nbsp;·&nbsp; F1: <span class="violet bold">0,714</span>
         </p>
         <p class="xsmall dim" style="margin:0.3em 0 0;">Sin ningún entrenamiento adicional</p>
       </div>
       <div class="card bar-dim">
         <p class="small dim" style="margin:0 0 0.25em;">SFT v4 (entrenado en escala binaria)</p>
         <p class="small" style="margin:0;">
-          Precisión: 0.654 &nbsp;·&nbsp; F1: 0.714
+          Precisión: 0,654 &nbsp;·&nbsp; F1: 0,714
         </p>
         <p class="xsmall dim" style="margin:0.3em 0 0;">Con 1.300 ejemplos de entrenamiento</p>
       </div>
@@ -1375,23 +1383,23 @@
     <div>
       <div class="sh"><h2>Conclusiones</h2></div>
       <ul style="font-size:1.1em;line-height:2.4;">
-        <li>Pipeline analítico habilita por primera vez análisis histórico sistemático</li>
-        <li>Cuentas automatizadas escalan volumen sin degradar calidad individual</li>
-        <li>Escala 0–10 → 0–3: mejora consistente en todos los modelos</li>
-        <li>SFT mejora precisión en <span class="green">+64 %</span> vs baseline</li>
-        <li>Prompt binario: alternativa competitiva sin entrenamiento</li>
+        <li>Pipeline analítico habilita por primera vez análisis histórico sistemático.</li>
+        <li>Cuentas automatizadas escalan volumen sin degradar calidad individual.</li>
+        <li>Escala 0–10 → 0–3: mejora consistente en todos los modelos.</li>
+        <li>SFT mejora precisión en <span class="green">+64 %</span> vs baseline.</li>
+        <li>Prompt binario: alternativa competitiva sin entrenamiento.</li>
       </ul>
     </div>
     <div>
       <div class="sh"><h2 style="color:var(--violet);">Próximos pasos</h2></div>
       <div class="card" style="margin-bottom:0.7em;">
-        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="green bold">① Dataset</span> — escalar el conjunto de ajuste para convergencia del SFT</p>
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="green bold">① Dataset</span> — escalar el conjunto de ajuste para convergencia del SFT.</p>
       </div>
       <div class="card" style="margin-bottom:0.7em;">
-        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="violet bold">② DPO</span> — Direct Preference Optimization para balance precisión/recall más controlado</p>
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="violet bold">② DPO</span> — Direct Preference Optimization para balance precisión/recall más controlado.</p>
       </div>
       <div class="card">
-        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="white bold">③ Embeddings multimodales</span> — LLM → embeddings → SVM/XGBoost, elimina costo de inferencia por post</p>
+        <p style="margin:0;font-size:0.95em;line-height:1.8;"><span class="white bold">③ Embeddings multimodales</span> — LLM → embeddings → SVM/XGBoost, elimina costo de inferencia por post.</p>
       </div>
     </div>
   </div>
@@ -1419,7 +1427,7 @@
         <span class="stat-label" style="font-size:0.85em;">precisión SFT</span>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1em 1.6em;text-align:center;">
-        <span class="stat" style="font-size:2.2em;">0.714</span>
+        <span class="stat" style="font-size:2.2em;">0,714</span>
         <span class="stat-label" style="font-size:0.85em;">F1 score</span>
       </div>
     </div>
