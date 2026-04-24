@@ -26,7 +26,7 @@
       --bg-card:   #161616;
       --bg-card2:  #1e1e1e;
       --text:      #d8d8d8;
-      --text-dim:  #b8b8b8;
+      --text-dim:  #d4d4d4;
       --border:    #2a2a2a;
       --green:     #39ff14;
       --violet:    #bf5fff;
@@ -172,7 +172,7 @@
     .img-caption {
       display: block;
       font-size: 0.72em;
-      color: #c0c0c0;
+      color: #d4d4d4;
       text-align: center;
       margin-top: 0.4em;
     }
@@ -296,10 +296,10 @@
       color: var(--white);
       margin-bottom: 0.7em;
     }
-    .title-slide .author   { font-size: 1.15em; color: var(--green); margin-bottom: 0.15em; }
+    .title-slide .author   { font-size: 1.25em; color: var(--green); margin-bottom: 0.15em; }
     .title-slide .prog     { font-size: 0.95em; color: var(--white); }
-    .title-slide .dir      { font-size: 0.88em; color: #c0c0c0; margin-top: 0.55em; }
-    .title-slide .jury     { font-size: 0.78em; color: #b0b0b0; margin-top: 0.3em; line-height: 1.7; }
+    .title-slide .dir      { font-size: 0.88em; color: #d4d4d4; margin-top: 0.55em; }
+    .title-slide .jury     { font-size: 0.85em; color: #d4d4d4; margin-top: 0.3em; line-height: 1.7; }
 
     /* ============================================================
        PRINT / PDF — one slide per page, 16:9 (simil PPT export)
@@ -401,7 +401,7 @@
     <div style="text-align:center;">
       <div class="terminal-frame" style="display:inline-block;">
         <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">X.com — intervención Normsy</span></div>
-        <div class="terminal-body" style="padding:0.3em;line-height:0;"><img src="images/normsy_intervention_screenshot.png" class="img-slide2" style="display:block;width:auto;max-height:420px;" alt="Intervención Normsy"></div>
+        <div class="terminal-body" style="padding:0.3em;line-height:0;"><img src="images/normsy_intervention_screenshot.png" class="img-slide2" style="display:block;width:auto;max-height:480px;" alt="Intervención Normsy"></div>
       </div>
       <span class="img-caption">Intervención generada automáticamente por Normsy en X.com</span>
     </div>
@@ -414,7 +414,7 @@
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Normsy</h2></div>
-  <div class="cols">
+  <div class="cols" style="font-size:1.08em;">
     <div>
       <p class="bar-green" style="font-size:0.88em;margin-bottom:0.9em;">
         Plataforma de contranarrativas automatizadas en X.com
@@ -446,7 +446,7 @@
   </div>
 
   <!-- Timeline -->
-  <div style="margin-top:1.6em;position:relative;padding:0 0.5em;">
+  <div style="margin-top:1.6em;position:relative;padding:0 0.5em;font-size:1.08em;">
     <div style="position:absolute;top:8px;left:0;right:0;height:2px;background:var(--border);"></div>
     <div style="display:flex;justify-content:space-between;position:relative;">
       <div style="text-align:center;flex:0 0 auto;">
@@ -491,20 +491,9 @@
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
     <h2 style="margin-bottom:0.8em;text-align:center;">Normsy en acción</h2>
 
-    <!--
-      Cuando el video esté grabado, reemplazar el bloque .vid-placeholder
-      por el siguiente elemento (descomentar):
-
-      <video controls width="84%" style="border:1px solid #2a2a2a;border-radius:4px;display:block;margin:0 auto;">
-        <source src="video/normsy_demo.mp4" type="video/mp4">
-      </video>
-    -->
-
-    <div class="vid-placeholder">
-      <div class="play">▶</div>
-      <p>video/normsy_demo.mp4</p>
-      <p class="xsmall">[ placeholder — reemplazar cuando el video esté grabado ]</p>
-    </div>
+    <video controls width="84%" style="border:1px solid #2a2a2a;border-radius:4px;display:block;margin:0 auto;">
+      <source src="videos/normsy_intro.mp4" type="video/mp4">
+    </video>
     <p class="xsmall dim" style="margin-top:0.7em;text-align:center;">
       Recorrido: tweet tóxico detectado → clasificado → intervención publicada →<br>
       evento Kafka → pipeline ETL → métricas en Grafana → framework evaluando → fine-tuning en Vertex AI
@@ -553,7 +542,7 @@
       <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">normsy — arquitectura de infraestructura</span></div>
       <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/normsy_infra_v2.png" style="display:block;width:100%;height:auto;" alt="Arquitectura Normsy"></div>
     </div>
-    <div>
+    <div style="font-size:1.1em;">
       <div class="card" style="border-left:3px solid var(--green);margin-bottom:0.6em;">
         <p class="green bold small" style="margin:0 0 0.2em;">① Solución de datos</p>
         <p class="xsmall dim" style="margin:0;line-height:1.6;">
@@ -739,26 +728,11 @@
 
 
 <!-- ============================================================
-     SLIDE 10 — GRAFANA DASHBOARD
-     ============================================================ -->
-<section data-background-color="#0d0d0d">
-  <div class="sh"><h2>Dashboard Platform Insights</h2></div>
-  <div class="terminal-frame" style="margin:0 auto;max-width:95%;">
-    <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">grafana — Platform Insights</span></div>
-    <div class="terminal-body" style="padding:0.3em;"><img src="images/platform_insights.png" class="img-dark" style="max-height:560px;" alt="Grafana Platform Insights"></div>
-  </div>
-  <span class="img-caption">
-    KPIs en tiempo real: intervenciones totales · impresiones · Normsy Impact Ratio · evolución temporal
-  </span>
-</section>
-
-
-<!-- ============================================================
      SLIDE 11 — HALLAZGO: CUENTAS AUTOMATIZADAS
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Análisis exploratorio — cuentas automatizadas</h2></div>
-  <div class="c40-60" style="align-items:start;">
+  <div class="c40-60" style="align-items:start;font-size:1.15em;">
     <div>
       <div class="card" style="margin-bottom:0.55em;">
         <span class="stat">111.000+</span>
@@ -803,7 +777,7 @@
       <div class="fragment fade-in" data-fragment-index="1" style="position:absolute;top:0;left:0;width:100%;">
         <div class="terminal-frame">
           <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">EDA — impacto de respuestas</span></div>
-          <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;height:34vh;overflow:hidden;"><img src="images/eda/esp/reply_count_with_replies.svg" style="display:block;width:100%;height:100%;object-fit:contain;" alt="Distribución de respuestas recibidas"></div>
+          <div class="terminal-body" style="background:#ffffff;padding:0.4em;"><img src="images/eda/esp/reply_count_with_replies.svg" style="display:block;width:100%;height:auto;" alt="Distribución de respuestas recibidas"></div>
         </div>
         <span class="img-caption">
           Distribución de respuestas recibidas por intervención<br>
@@ -820,7 +794,7 @@
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Clasificador de toxicidad — el problema</h2></div>
-  <div class="cols">
+  <div class="cols" style="font-size:1.15em;">
     <div>
       <div class="card" style="border:1px solid var(--red);margin-bottom:0.55em;">
         <p class="small" style="color:var(--red);margin:0 0 0.25em;font-weight:600;">Falsos positivos</p>
@@ -855,7 +829,7 @@
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Framework de evaluación de clasificadores</h2></div>
-  <div class="c40-60" style="align-items:start;">
+  <div class="c35-65" style="align-items:start;font-size:1.05em;">
     <div>
       <ul style="font-size:1.08em;margin-bottom:0.7em;line-height:2.0;">
         <li><span class="green">13 modelos</span> de 5 proveedores</li>
@@ -885,7 +859,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div style="transform:scale(0.97);transform-origin:top left;">
       <div class="terminal-frame">
         <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">framework — arquitectura</span></div>
         <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/framework_architecture.png" style="display:block;width:100%;height:auto;" alt="Arquitectura del framework"></div>
@@ -991,11 +965,28 @@
 
 
 <!-- ============================================================
+     SLIDE 14b — DASHBOARDS & PIPELINE EN ACCIÓN (VIDEO)
+     ============================================================ -->
+<section data-background-color="#0d0d0d">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
+    <h2 style="margin-bottom:0.8em;text-align:center;">Plataforma en acción</h2>
+    <iframe width="96%" height="75%" style="border:1px solid #2a2a2a;border-radius:4px;display:block;margin:0 auto;aspect-ratio:16/9;"
+      src="https://www.youtube.com/embed/DwcZ6lxrLPc"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+    <p class="xsmall dim" style="margin-top:0.7em;text-align:center;">
+      Dashboards Grafana · pipeline ETL · CDC Kafka · métricas en tiempo real
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
      SLIDE 14 — ESCALA: 0-10 vs 0-3
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Evolución de la escala de clasificación</h2></div>
-  <div class="c40-60" style="align-items:start;">
+  <div class="c40-60" style="align-items:start;font-size:0.9em;">
     <div>
       <div class="card bar-dim" style="margin-bottom:0.6em;">
         <p style="color:var(--text-dim);margin:0 0 0.3em;font-weight:600;font-size:0.92em;">Escala 0–10 (producción inicial)</p>
@@ -1018,7 +1009,7 @@
         <span class="stat-label">mejora en F1 en todos los modelos evaluados</span>
       </div>
     </div>
-    <div>
+    <div style="transform:scale(1.08);transform-origin:top left;">
       <div class="terminal-frame">
         <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">evaluate.py — F1 por escala</span></div>
         <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/toxicity/scale_comparison_f1.svg" style="display:block;width:100%;height:auto;" alt="Comparación F1 por escala"></div>
