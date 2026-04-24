@@ -1471,5 +1471,25 @@
     });
   })();
 </script>
+
+<!-- ============================================================
+     Laser pointer — hold L to activate
+     ============================================================ -->
+<div id="laser" style="position:fixed;width:18px;height:18px;border-radius:50%;background:rgba(255,30,30,0.9);box-shadow:0 0 8px 4px rgba(255,0,0,0.5);pointer-events:none;display:none;z-index:99999;transform:translate(-50%,-50%);"></div>
+<script>
+  (function() {
+    var dot = document.getElementById('laser');
+    var active = false;
+    document.addEventListener('mousemove', function(e) {
+      if (active) { dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px'; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'l' || e.key === 'L') { active = true; dot.style.display = 'block'; }
+    });
+    document.addEventListener('keyup', function(e) {
+      if (e.key === 'l' || e.key === 'L') { active = false; dot.style.display = 'none'; }
+    });
+  })();
+</script>
 </body>
 </html>
