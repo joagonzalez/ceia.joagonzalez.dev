@@ -528,67 +528,29 @@
 
 
 <!-- ============================================================
-     SLIDE 6 — TRES ÁREAS DE TRABAJO
+     SLIDE 6 — SOLUCIÓN DE DATOS
      ============================================================ -->
 <section data-background-color="#0d0d0d">
-  <div class="sh"><h2>Áreas de trabajo del proyecto</h2></div>
-  <div class="c60-40">
+  <div class="sh"><h2>Solución de datos — el problema</h2></div>
+  <div class="c60-40" style="align-items:start;">
     <div class="terminal-frame">
       <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">normsy — arquitectura de infraestructura</span></div>
       <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/normsy_infra_v2.png" style="display:block;width:100%;height:auto;" alt="Arquitectura Normsy"></div>
     </div>
-    <div style="font-size:1.1em;">
-      <div class="card" style="border-left:3px solid var(--green);margin-bottom:0.6em;">
-        <p class="green bold small" style="margin:0 0 0.2em;">① Solución de datos</p>
-        <p class="xsmall dim" style="margin:0;line-height:1.6;">
-          MongoDB → PostgreSQL<br>
-          Airflow ETL · Kafka CDC · Grafana dashboards
-        </p>
-      </div>
-      <div class="card" style="border-left:3px solid var(--violet);margin-bottom:0.6em;">
-        <p class="violet bold small" style="margin:0 0 0.2em;">② Framework de evaluación</p>
-        <p class="xsmall dim" style="margin:0;line-height:1.6;">
-          13 modelos · 5 proveedores<br>
-          Pareto costo–F1 · escala de clasificación
-        </p>
-      </div>
-      <div class="card" style="border-left:3px solid var(--text-dim);">
-        <p class="white bold small" style="margin:0 0 0.2em;">③ Fine-tuning del clasificador</p>
-        <p class="xsmall dim" style="margin:0;line-height:1.6;">
-          SFT sobre familia Gemini · Vertex AI<br>
-          4 versiones · +64 % precisión
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SLIDE 7 — PROBLEMA DE DATOS
-     ============================================================ -->
-<section data-background-color="#0d0d0d">
-  <div class="sh"><h2>Solución de datos — el problema</h2></div>
-  <div class="cols">
-    <div>
+    <div style="font-size:1.08em;">
       <div class="card bar-dim" style="margin-bottom:0.55em;">
         <p class="small dim" style="margin:0 0 0.25em;">Estado inicial</p>
         <p class="small" style="margin:0;">
-          MongoDB Atlas como única base de datos<br>
-          → flexible para escritura, limitada para analítica<br>
-          → 800.000+ registros sin joins ni window functions
+          MongoDB Atlas como única fuente<br>
+          → 800.000+ registros sin joins ni analítica
         </p>
       </div>
-      <div class="card bar-dim">
-        <p class="small dim" style="margin:0 0 0.25em;">Consecuencia operacional</p>
+      <div class="card bar-dim" style="margin-bottom:0.55em;">
+        <p class="small dim" style="margin:0 0 0.25em;">Consecuencia</p>
         <p class="small" style="margin:0;">
-          Sin historial analítico explotable<br>
-          Sin dashboards de monitoreo<br>
-          Sin capacidad de análisis exploratorio sistemático
+          Sin dashboards · sin EDA sistemático
         </p>
       </div>
-    </div>
-    <div>
       <div class="card" style="border:1px solid var(--green);">
         <p class="small dim" style="margin:0 0 0.3em;">Decisión de diseño</p>
         <p class="green bold" style="margin:0 0 0.3em;font-size:0.9em;">MongoDB → PostgreSQL</p>
