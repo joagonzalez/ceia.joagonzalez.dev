@@ -775,12 +775,34 @@
         </div>
       </div>
     </div>
-    <div style="transform:scale(0.97);transform-origin:top left;">
-      <div class="terminal-frame">
-        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">framework — arquitectura</span></div>
-        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/framework_architecture.png" style="display:block;width:100%;height:auto;" alt="Arquitectura del framework"></div>
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:0.7em;height:100%;">
+      <!-- Flow diagram -->
+      <div style="display:flex;align-items:center;gap:0.5em;">
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--green);border-radius:4px;padding:0.7em 0.6em;text-align:center;">
+          <p class="green bold small" style="margin:0 0 0.2em;">YAML</p>
+          <p class="xsmall dim" style="margin:0;">Configuración<br>de experimento</p>
+        </div>
+        <div style="color:var(--text-dim);font-size:1.3em;">→</div>
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--green);border-radius:4px;padding:0.7em 0.6em;text-align:center;">
+          <p class="green bold small" style="margin:0 0 0.2em;">CLI</p>
+          <p class="xsmall dim" style="margin:0;">run.py<br>punto de entrada</p>
+        </div>
+        <div style="color:var(--text-dim);font-size:1.3em;">→</div>
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--violet);border-radius:4px;padding:0.7em 0.6em;text-align:center;">
+          <p class="violet bold small" style="margin:0 0 0.2em;">LLM APIs</p>
+          <p class="xsmall dim" style="margin:0;">OpenAI · Google<br>Anthropic · xAI · Alibaba</p>
+        </div>
+        <div style="color:var(--text-dim);font-size:1.3em;">→</div>
+        <div style="flex:1;background:var(--bg-card);border:1px solid var(--white);border-radius:4px;padding:0.7em 0.6em;text-align:center;">
+          <p class="white bold small" style="margin:0 0 0.2em;">PostgreSQL</p>
+          <p class="xsmall dim" style="margin:0;">Resultados<br>y métricas</p>
+        </div>
       </div>
-      <span class="img-caption">CLI como punto de entrada único — coordina clasificación, persistencia y métricas</span>
+      <div class="card bar-green" style="margin-top:0.4em;">
+        <p class="xsmall" style="margin:0;line-height:1.7;">
+          Reproducible · versionado en Git · 400 posts golden dataset · F1, precisión, recall, costo USD, latencia
+        </p>
+      </div>
     </div>
   </div>
 </section>
