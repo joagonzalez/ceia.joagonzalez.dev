@@ -1209,33 +1209,21 @@
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Hallazgos</h2></div>
-  <div class="cols">
-    <div>
-      <div class="card" style="border:1px solid var(--violet);margin-bottom:0.55em;">
-        <p class="violet bold small" style="margin:0 0 0.25em;">Prompt binario sobre modelo base</p>
-        <p class="xsmall dim" style="margin:0.3em 0 0;">F1 equivalente al SFT — sin ningún entrenamiento adicional</p>
-      </div>
-      <div class="card bar-dim">
-        <p class="small dim" style="margin:0 0 0.25em;">SFT v4 (escala binaria)</p>
-        <p class="xsmall dim" style="margin:0.3em 0 0;">Requiere 1.300 ejemplos de entrenamiento para resultado comparable</p>
-      </div>
+  <div style="display:flex;flex-direction:column;gap:0.8em;max-width:75%;margin:0 auto;">
+    <div class="card bar-violet">
+      <p class="small" style="margin:0;line-height:1.7;">
+        El modelo base ya contiene conocimiento relevante sobre toxicidad en el dominio político-partidario
+      </p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:0.6em;">
-      <div class="card bar-violet">
-        <p class="small" style="margin:0;line-height:1.7;">
-          El modelo base ya contiene conocimiento relevante sobre toxicidad en el dominio político-partidario
-        </p>
-      </div>
-      <div class="card bar-green">
-        <p class="small" style="margin:0;line-height:1.7;">
-          1.300 ejemplos insuficientes para superar ese conocimiento previo en tarea directamente binaria
-        </p>
-      </div>
-      <div class="card">
-        <p class="small dim" style="margin:0;line-height:1.7;">
-          Prompt binario: alternativa de menor costo operacional con rendimiento comparable al SFT actual
-        </p>
-      </div>
+    <div class="card bar-green">
+      <p class="small" style="margin:0;line-height:1.7;">
+        1.300 ejemplos insuficientes para superar ese conocimiento previo en tarea directamente binaria
+      </p>
+    </div>
+    <div class="card">
+      <p class="small dim" style="margin:0;line-height:1.7;">
+        Prompt binario: alternativa de menor costo operacional con rendimiento comparable al SFT actual
+      </p>
     </div>
   </div>
 </section>
