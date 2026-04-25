@@ -571,7 +571,7 @@
      ============================================================ -->
 <section data-background-color="#0d0d0d">
   <div class="sh"><h2>Dos estrategias de procesamiento</h2></div>
-  <div class="c40-60" style="align-items:start;">
+  <div class="c40-60" style="align-items:start;font-size:1.08em;">
     <div>
       <div class="card bar-green" style="margin-bottom:0.6em;">
         <p class="green bold small" style="margin:0 0 0.3em;">Batch — Apache Airflow</p>
@@ -584,58 +584,17 @@
       <div class="card bar-violet">
         <p class="violet bold small" style="margin:0 0 0.3em;">Real-time — Kafka CDC</p>
         <p class="small" style="margin:0;line-height:1.7;">
-          Change Data Capture sobre oplog MongoDB<br>
-          Debezium + Kafka + consumer Python<br>
+          Change Data Capture sobre MongoDB<br>
           Evento procesado en &lt; 1 segundo
         </p>
       </div>
     </div>
     <div>
       <div class="terminal-frame">
-        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">airflow — arquitectura</span></div>
-        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/airflow_architecture.png" style="display:block;width:100%;height:auto;" alt="Arquitectura Apache Airflow"></div>
+        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">kafka — pipeline CDC</span></div>
+        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/kafka_stack_flow.png" style="display:block;width:100%;height:auto;" alt="Kafka CDC pipeline"></div>
       </div>
-      <span class="img-caption">Arquitectura Apache Airflow — Scheduler, Workers, Webserver y DAG Directory</span>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SLIDE 9a — CDC: STACK TECNOLÓGICO
-     ============================================================ -->
-<section data-background-color="#0d0d0d">
-  <div class="sh"><h2>Change Data Capture — stack tecnológico</h2></div>
-  <div class="c40-60" style="align-items:start;">
-    <div>
-      <div class="card bar-green" style="margin-bottom:0.55em;">
-        <p class="green bold small" style="margin:0 0 0.25em;">Kafka</p>
-        <p class="small" style="margin:0;line-height:1.7;">
-          Bus de eventos distribuido<br>
-          Desacopla productores y consumidores
-        </p>
-      </div>
-      <div class="card bar-violet" style="margin-bottom:0.55em;">
-        <p class="violet bold small" style="margin:0 0 0.25em;">Debezium</p>
-        <p class="small" style="margin:0;line-height:1.7;">
-          Conector CDC open-source<br>
-          Captura cambios desde el oplog de MongoDB
-        </p>
-      </div>
-      <div class="card bar-dim">
-        <p class="white bold small" style="margin:0 0 0.25em;">Kafka Connect</p>
-        <p class="small" style="margin:0;line-height:1.7;">
-          Framework de integración<br>
-          Orquesta source y sink connectors
-        </p>
-      </div>
-    </div>
-    <div>
-      <div class="terminal-frame">
-        <div class="terminal-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="terminal-bar-title">kafka — stack tecnológico</span></div>
-        <div class="terminal-body" style="background:#f2f2f2;padding:0.4em;"><img src="images/kafka_stack_flow.png" style="display:block;width:100%;height:auto;" alt="Kafka stack flow"></div>
-      </div>
-      <span class="img-caption">Kafka + Debezium + Kafka Connect — captura de cambios en tiempo real desde MongoDB</span>
+      <span class="img-caption">Pipeline CDC — captura de cambios en tiempo real desde MongoDB hacia PostgreSQL</span>
     </div>
   </div>
 </section>
