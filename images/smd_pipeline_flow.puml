@@ -1,0 +1,39 @@
+@startuml
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 12
+skinparam backgroundColor white
+skinparam ArrowColor #444444
+skinparam componentBorderColor #444444
+skinparam componentBackgroundColor #F5F5F5
+skinparam databaseBorderColor #444444
+skinparam databaseBackgroundColor #E8F4FD
+skinparam storageBorderColor #444444
+skinparam storageBackgroundColor #E8F5E9
+skinparam noteBorderColor #AAAAAA
+skinparam noteBackgroundColor #FAFAFA
+
+database "MongoDB\n(detoxDB)" as mongo
+component "Extracción" as extract
+storage "BSON" as bson
+component "Transformación" as transform
+storage "CSV" as csv
+component "Carga" as load
+database "PostgreSQL\n(analytics_db)" as postgres
+component "Métricas" as metrics
+component "Limpieza" as cleanup
+component "Telegram" as telegram
+
+mongo -right-> extract
+extract -right-> bson
+bson -right-> transform
+transform -right-> csv
+
+csv -down-> load
+
+load -left-> postgres : carga
+postgres -left-> metrics
+metrics -left-> cleanup
+
+load ..> telegram : [fallo]
+cleanup ..> telegram : [éxito]
+@enduml

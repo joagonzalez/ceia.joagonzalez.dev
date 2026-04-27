@@ -1,0 +1,38 @@
+@startuml
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 12
+skinparam backgroundColor white
+skinparam ArrowColor #444444
+skinparam componentBorderColor #444444
+skinparam componentBackgroundColor #F5F5F5
+skinparam databaseBorderColor #444444
+skinparam databaseBackgroundColor #E8F4FD
+skinparam noteBorderColor #AAAAAA
+skinparam noteBackgroundColor #FAFAFA
+
+database "MongoDB\n(detoxDB)" as mongo
+database "PostgreSQL\n(analytics_db)" as postgres
+component "Verificación CDC\n(check_cdc_dag)" as dag
+component "Mailgun\n(alertas)" as mailgun
+component "Equipo del\nProyecto" as team
+
+mongo -down-> dag : count_documents()\n(16 colecciones)
+postgres -down-> dag : SELECT COUNT(*)\n(16 tablas smd_*)
+dag -right-> mailgun : [discrepancia\nsignificativa]\nalerta
+mailgun -right-> team : Email HTML\ncon tabla\ncomparativa
+
+note bottom of dag
+  Ejecución: cada hora
+  Tolerancia aceptable:
+  diferencia ≤ 100 docs
+  o diferencia ≤ 1% del total
+  en MongoDB (lo que sea menor)
+end note
+
+note right of team
+  Se notifica al equipo cuando
+  la diferencia entre fuente
+  y destino supera el umbral
+  definido de consistencia
+end note
+@enduml
